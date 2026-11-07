@@ -1,0 +1,71 @@
+name: Cloud Render Video
+
+on:
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Topik atau judul konten video'
+        required: true
+        default: 'Remotion Mobile Demo'
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    name: Render Video on Cloud
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install FFmpeg & Chromium dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libgbm1 libasound2
+
+      - name: Install dependencies
+        run: |
+          npm install --legacy-peer-deps
+
+      - name: Prepare Render Props
+        env:
+          INPUT_TOPIC: ${{ github.event.inputs.topic }}
+        run: |
+          node -e '
+            const fs = require("fs");
+            const topic = process.env.INPUT_TOPIC || "Remotion Cloud Demo";
+            fs.writeFileSync("props.json", JSON.stringify({ topic }));
+          '
+
+      - name: Render Video
+        run: |
+          mkdir -p out
+          npx remotion render remotion/index.ts MainVideo out/video.mp4 --props=props.json
+
+      - name: Upload Video Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-video
+          path: out/video.mp4
+
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        if: success()
+        with:
+          tag_name: latest
+          name: 'Latest Rendered Video'
+          body: |
+            🎥 Cloud Video Rendered via Remotion & GitHub Actions
+            - **Topik:** ${{ github.event.inputs.topic }}
+            - **Run ID:** ${{ github.run_id }}
+            - **Render Date:** ${{ github.event.repository.updated_at }}
+          files: out/video.mp4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

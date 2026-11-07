@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Remotion Mobile Controller</title>
+  <style>
+    :root {
+      --bg-primary: #0a0d14;
+      --bg-card: #121824;
+      --bg-input: #1a2332;
+      --accent-color: #3b82f6;
+      --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      --accent-hover: #2563eb;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --error-color: #ef4444;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border-color: #243042;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-top: env(safe-area-inset-top, 16px);
+      padding-bottom: env(safe-area-inset-bottom, 20px);
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 18px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #fff;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .badge-cloud {
+      font-size: 11px;
+      font-weight: 600;
+      color: #60a5fa;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
+
+    .btn-icon {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--accent-gradient);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.2s, transform 0.1s;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      background: #1f2937;
+      color: #f3f4f6;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      margin-top: 10px;
+    }
+
+    .status-box {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .status-dot.idle { background-color: var(--text-muted); }
+    .status-dot.running {
+      background-color: var(--warning-color);
+      animation: pulse 1.5s infinite;
+    }
+    .status-dot.success { background-color: var(--success-color); }
+    .status-dot.error { background-color: var(--error-color); }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); }
+      70% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+
+    .status-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .status-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .status-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+      border: 1px solid var(--border-color);
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .video-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .collapsible {
+      display: none;
+      transition: all 0.3s ease;
+    }
+
+    .collapsible.open {
+      display: block;
+    }
+
+    .spinner {
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-top: 2px solid #fff;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 12px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon">R</div>
+      <div>
+        <h1>Remotion Mobile</h1>
+        <span class="badge-cloud">Cloud Actions Render</span>
+      </div>
+    </div>
+    <button id="toggleSettingsBtn" class="btn-icon">
+      ⚙️ Pengaturan
+    </button>
+  </header>
+
+  <!-- Settings Card -->
+  <section id="settingsSection" class="card collapsible">
+    <div class="card-title">
+      <span>Konfigurasi GitHub</span>
+      <span style="font-size: 11px; color: var(--accent-color);">Tersimpan di Perangkat</span>
+    </div>
+
+    <div class="form-group">
+      <label for="ghToken">GitHub Personal Access Token (PAT):</label>
+      <input type="password" id="ghToken" placeholder="ghp_... atau github_pat_..." autocomplete="off" />
+      <span style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 4px;">
+        Dibutuhkan scope: <code>repo</code> atau <code>workflow</code>.
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="ghRepo">Target Repositori:</label>
+      <input type="text" id="ghRepo" value="Zehna/remotion-android-app" placeholder="owner/repository" />
+    </div>
+
+    <div class="form-group">
+      <label for="ghBranch">Branch:</label>
+      <input type="text" id="ghBranch" value="main" placeholder="main" />
+    </div>
+
+    <button id="saveSettingsBtn" class="btn-primary" style="padding: 10px; font-size: 13px;">
+      Simpan Konfigurasi
+    </button>
+  </section>
+
+  <!-- Controller Card -->
+  <section class="card">
+    <div class="card-title">Render Video Baru</div>
+
+    <div class="form-group">
+      <label for="videoTopic">Topik / Konten Video:</label>
+      <input type="text" id="videoTopic" placeholder="Contoh: Tutorial Teknologi AI 2026" />
+    </div>
+
+    <button id="renderBtn" class="btn-primary">
+      <span id="renderBtnIcon">🚀</span>
+      <span id="renderBtnText">Mulai Cloud Render</span>
+    </button>
+
+    <div class="status-box">
+      <div id="statusDot" class="status-dot idle"></div>
+      <div class="status-info">
+        <div id="statusTitle" class="status-text">Siap</div>
+        <div id="statusDesc" class="status-sub">Masukkan topik dan klik render</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preview & Download Section -->
+  <section class="card">
+    <div class="card-title">
+      <span>Hasil Render</span>
+      <button id="refreshReleaseBtn" class="btn-icon" style="padding: 4px 8px; font-size: 11px;">
+        🔄 Cek Rilis
+      </button>
+    </div>
+
+    <div class="video-wrapper">
+      <video id="videoPlayer" controls playsinline style="display: none;"></video>
+      <div id="videoPlaceholder" class="video-placeholder">
+        <span style="font-size: 28px;">🎬</span>
+        <span>Belum ada video yang diputar</span>
+      </div>
+    </div>
+
+    <a id="downloadBtn" class="btn-secondary" style="display: none;" download="video.mp4">
+      ⬇️ Download Video (MP4)
+    </a>
+  </section>
+
+  <footer>
+    Remotion Android Controller &bull; Powered by GitHub Actions
+  </footer>
+
+  <script>
+    // State & DOM
+    const ghTokenInput = document.getElementById('ghToken');
+    const ghRepoInput = document.getElementById('ghRepo');
+    const ghBranchInput = document.getElementById('ghBranch');
+    const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+    const toggleSettingsBtn = document.getElementById('toggleSettingsBtn');
+    const settingsSection = document.getElementById('settingsSection');
+
+    const videoTopicInput = document.getElementById('videoTopic');
+    const renderBtn = document.getElementById('renderBtn');
+    const renderBtnIcon = document.getElementById('renderBtnIcon');
+    const renderBtnText = document.getElementById('renderBtnText');
+    const statusDot = document.getElementById('statusDot');
+    const statusTitle = document.getElementById('statusTitle');
+    const statusDesc = document.getElementById('statusDesc');
+
+    const videoPlayer = document.getElementById('videoPlayer');
+    const videoPlaceholder = document.getElementById('videoPlaceholder');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const refreshReleaseBtn = document.getElementById('refreshReleaseBtn');
+
+    let isPolling = false;
+    let pollInterval = null;
+
+    // Load Saved Settings
+    function loadSettings() {
+      const savedToken = localStorage.getItem('remotion_gh_token');
+      const savedRepo = localStorage.getItem('remotion_gh_repo');
+      const savedBranch = localStorage.getItem('remotion_gh_branch');
+
+      if (savedToken) ghTokenInput.value = savedToken;
+      if (savedRepo) ghRepoInput.value = savedRepo;
+      if (savedBranch) ghBranchInput.value = savedBranch;
+
+      if (!savedToken) {
+        settingsSection.classList.add('open');
+      }
+    }
+
+    // Save Settings
+    saveSettingsBtn.addEventListener('click', () => {
+      localStorage.setItem('remotion_gh_token', ghTokenInput.value.trim());
+      localStorage.setItem('remotion_gh_repo', ghRepoInput.value.trim() || 'Zehna/remotion-android-app');
+      localStorage.setItem('remotion_gh_branch', ghBranchInput.value.trim() || 'main');
+      alert('Pengaturan GitHub berhasil disimpan!');
+      settingsSection.classList.remove('open');
+    });
+
+    toggleSettingsBtn.addEventListener('click', () => {
+      settingsSection.classList.toggle('open');
+    });
+
+    // Update Status Helper
+    function setStatus(type, title, desc) {
+      statusDot.className = 'status-dot ' + type;
+      statusTitle.textContent = title;
+      statusDesc.textContent = desc;
+    }
+
+    // Trigger Cloud Render via workflow_dispatch
+    renderBtn.addEventListener('click', async () => {
+      const token = ghTokenInput.value.trim() || localStorage.getItem('remotion_gh_token');
+      const repo = ghRepoInput.value.trim() || 'Zehna/remotion-android-app';
+      const branch = ghBranchInput.value.trim() || 'main';
+      const topic = videoTopicInput.value.trim() || 'Default Topic';
+
+      if (!token) {
+        alert('Silakan masukkan GitHub Token di menu Pengaturan terlebih dahulu.');
+        settingsSection.classList.add('open');
+        return;
+      }
+
+      renderBtn.disabled = true;
+      renderBtnIcon.innerHTML = '<span class="spinner"></span>';
+      renderBtnText.textContent = 'Memulai Workflow...';
+      setStatus('running', 'Menghubungi GitHub Actions...', 'Mengirim sinyal workflow_dispatch');
+
+      try {
+        const dispatchUrl = `https://api.github.com/repos/${repo}/actions/workflows/render.yml/dispatches`;
+        const res = await fetch(dispatchUrl, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            ref: branch,
+            inputs: {
+              topic: topic
+            }
+          })
+        });
+
+        if (res.status === 204 || res.ok) {
+          setStatus('running', 'Workflow Berhasil Dijalankan', 'Memantau proses cloud render...');
+          startPolling(repo, token);
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.message || `HTTP ${res.status}`);
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus('error', 'Gagal Menjalankan Workflow', err.message);
+        renderBtn.disabled = false;
+        renderBtnIcon.textContent = '🚀';
+        renderBtnText.textContent = 'Mulai Cloud Render';
+      }
+    });
+
+    // Poll Workflow Runs & Releases
+    function startPolling(repo, token) {
+      if (isPolling) return;
+      isPolling = true;
+
+      const startTime = Date.now();
+      let checkCount = 0;
+
+      pollInterval = setInterval(async () => {
+        checkCount++;
+        try {
+          const runsUrl = `https://api.github.com/repos/${repo}/actions/workflows/render.yml/runs?per_page=1`;
+          const runsRes = await fetch(runsUrl, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          });
+
+          if (runsRes.ok) {
+            const data = await runsRes.json();
+            const latestRun = data.workflow_runs && data.workflow_runs[0];
+
+            if (latestRun) {
+              const runStatus = latestRun.status;
+              const runConclusion = latestRun.conclusion;
+
+              if (runStatus === 'queued') {
+                setStatus('running', 'Antrean Cloud Runner...', `Run #${latestRun.run_number} (${checkCount * 4}s)`);
+              } else if (runStatus === 'in_progress') {
+                setStatus('running', 'Sedang Merender Video...', `Rendering di GitHub Actions (${checkCount * 4}s)`);
+              } else if (runStatus === 'completed') {
+                if (runConclusion === 'success') {
+                  clearInterval(pollInterval);
+                  isPolling = false;
+                  setStatus('success', 'Render Selesai!', 'Mengambil video hasil render...');
+                  fetchLatestRelease(repo, token);
+                } else {
+                  clearInterval(pollInterval);
+                  isPolling = false;
+                  setStatus('error', 'Render Gagal', `Conclusion: ${runConclusion}`);
+                  resetRenderBtn();
+                }
+                return;
+              }
+            }
+          }
+
+          // Timeout after 15 minutes
+          if (Date.now() - startTime > 15 * 60 * 1000) {
+            clearInterval(pollInterval);
+            isPolling = false;
+            setStatus('error', 'Timeout', 'Waktu tunggu melebihi batas 15 menit');
+            resetRenderBtn();
+          }
+        } catch (e) {
+          console.error("Polling error:", e);
+        }
+      }, 4000);
+    }
+
+    function resetRenderBtn() {
+      renderBtn.disabled = false;
+      renderBtnIcon.textContent = '🚀';
+      renderBtnText.textContent = 'Mulai Cloud Render';
+    }
+
+    // Fetch Latest Release for video.mp4
+    async function fetchLatestRelease(repo, token) {
+      try {
+        const releaseUrl = `https://api.github.com/repos/${repo}/releases/tags/latest`;
+        const headers = { 'Accept': 'application/vnd.github.v3+json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const res = await fetch(releaseUrl, { headers });
+        if (!res.ok) {
+          // Fallback to releases list
+          const listRes = await fetch(`https://api.github.com/repos/${repo}/releases?per_page=5`, { headers });
+          if (listRes.ok) {
+            const releases = await listRes.json();
+            if (releases.length > 0) {
+              displayVideoAsset(releases[0]);
+              return;
+            }
+          }
+          throw new Error('Belum ada rilis video yang ditemukan');
+        }
+
+        const release = await res.json();
+        displayVideoAsset(release);
+      } catch (err) {
+        console.error(err);
+        setStatus('warning', 'Render selesai, rilis sedang disiapkan', err.message);
+        resetRenderBtn();
+      }
+    }
+
+    function displayVideoAsset(release) {
+      const asset = release.assets && release.assets.find(a => a.name.endsWith('.mp4'));
+      if (asset) {
+        const videoUrl = asset.browser_download_url;
+        videoPlayer.src = videoUrl;
+        videoPlayer.style.display = 'block';
+        videoPlaceholder.style.display = 'none';
+        videoPlayer.load();
+
+        downloadBtn.href = videoUrl;
+        downloadBtn.style.display = 'flex';
+        downloadBtn.textContent = `⬇️ Download ${asset.name} (${(asset.size / (1024 * 1024)).toFixed(1)} MB)`;
+
+        setStatus('success', 'Video Siap!', `Berhasil memuat ${asset.name}`);
+      } else {
+        setStatus('warning', 'Rilis Ditemukan', 'File MP4 belum tersedia di aset rilis');
+      }
+      resetRenderBtn();
+    }
+
+    refreshReleaseBtn.addEventListener('click', () => {
+      const token = ghTokenInput.value.trim() || localStorage.getItem('remotion_gh_token');
+      const repo = ghRepoInput.value.trim() || 'Zehna/remotion-android-app';
+      fetchLatestRelease(repo, token);
+    });
+
+    // Initialize
+    loadSettings();
+  </script>
+</body>
+</html>
