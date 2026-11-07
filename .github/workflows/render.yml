@@ -20,15 +20,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
-      - name: Install FFmpeg & Chromium dependencies
+      - name: Install FFmpeg
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libgbm1 libasound2
+          sudo apt-get install -y ffmpeg
 
       - name: Install dependencies
         run: |
@@ -65,7 +65,6 @@ jobs:
             🎥 Cloud Video Rendered via Remotion & GitHub Actions
             - **Topik:** ${{ github.event.inputs.topic }}
             - **Run ID:** ${{ github.run_id }}
-            - **Render Date:** ${{ github.event.repository.updated_at }}
           files: out/video.mp4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

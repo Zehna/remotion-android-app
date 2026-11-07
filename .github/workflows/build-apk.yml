@@ -24,16 +24,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install dependencies
         run: |
           npm install --legacy-peer-deps
 
-      - name: Sync Capacitor Android
+      - name: Copy & Sync Capacitor Android
         run: |
           npx cap sync android
 
